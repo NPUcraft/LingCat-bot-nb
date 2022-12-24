@@ -55,6 +55,7 @@ class Handle:
         msg += "\n".join(
             f"[{plugin_mode[p]if p in plugin_mode else 'xxx'} | {'o'if plugin[p] else 'x'}] {p}"
             for p in plugin
+            if plugin_mode[p] != "000"
         )
         return msg
 

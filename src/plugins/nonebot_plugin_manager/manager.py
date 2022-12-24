@@ -149,7 +149,7 @@ class PluginManager:
             if p not in plugin:
                 self.__plugin_list[p]["status"] = False
                 self.__plugin_list[p]["mode"] = "".join(
-                    str(int(m) & 0b0011) for m in self.__plugin_list[p]["mode"]
+                    str(int(m) & 0b0000) for m in self.__plugin_list[p]["mode"]
                 )
         self.__dump()
         return self

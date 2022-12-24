@@ -1,3 +1,5 @@
+from nonebot.adapters import Bot
+
 from argparse import Namespace
 import nonebot
 import time
@@ -6,7 +8,7 @@ from nonebot.params import ShellCommandArgs, CommandStart
 from nonebot.message import run_preprocessor, run_postprocessor
 from nonebot.exception import IgnoredException
 from nonebot.plugin import on_shell_command
-from nonebot.adapters.onebot.v11.message import Message, MessageSegment
+from nonebot.adapters.onebot.v11.message import MessageSegment
 from nonebot.adapters.onebot.v11 import (
     Bot,
     Event,
@@ -114,10 +116,13 @@ async def _(matcher: Matcher, bot: Bot, event: Event):
 
 
 troublemaker_list = {"user": {}, "group": {}, "channel": {}}
-
+cmd_flag = False
 # 指令刷屏拉黑
 @run_postprocessor
 async def _ban(matcher: Matcher, bot: Bot, event: Event):
+    global cmd_flag
+    if not cmd_flag:
+        return
 
     # 获取黑名单列表
     if isinstance(event, GroupMessageEvent):
@@ -334,3 +339,12 @@ async def _(bot: Bot, event: MessageEvent, args: Namespace = ShellCommandArgs())
             await unban.finish("无效的操作，请检查命令格式")
         else:
             await unban.finish(f"已将id={','.join(unban_list)}从黑名单中删除")
+
+
+@Bot.on_calling_api
+async def handle_api_call(bot: Bot, api: str):
+    global cmd_flag
+    if api == "send_msg":
+        cmd_flag = True
+    else:
+        cmd_flag = False

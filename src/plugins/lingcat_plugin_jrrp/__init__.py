@@ -22,7 +22,7 @@ __plugin_meta__ = PluginMetadata(
     extra={
         "version": "v1.0",
         "alias": ["今日人品", "jrrp"],
-        "mode": "757",
+        "mode": "755",
     },
 )
 

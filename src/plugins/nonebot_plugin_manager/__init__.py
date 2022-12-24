@@ -50,7 +50,7 @@ __plugin_meta__ = PluginMetadata(
     extra={
         "version": "v1.0",
         "alias": ["npm", "管理插件", "管理"],
-        "mode": "711",
+        "mode": "311",
     },
 )
 

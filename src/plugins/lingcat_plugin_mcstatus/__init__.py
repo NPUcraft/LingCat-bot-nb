@@ -47,7 +47,7 @@ __plugin_meta__ = PluginMetadata(
     extra={
         "version": "v1.0",
         "alias": ["mc", "mc状态查询"],
-        "mode": "757",
+        "mode": "755",
     },
 )
 

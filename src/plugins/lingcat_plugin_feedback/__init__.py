@@ -20,7 +20,7 @@ __plugin_meta__ = PluginMetadata(
     extra={
         "version": "v1.0",
         "alias": ["反馈", "send", "feedback", "fb"],
-        "mode": "711",
+        "mode": "311",
     },
 )
 

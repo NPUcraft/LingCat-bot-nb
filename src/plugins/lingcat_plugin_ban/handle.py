@@ -1,4 +1,5 @@
 from nonebot.adapters import Bot
+from typing import Dict, Any
 
 from argparse import Namespace
 import nonebot
@@ -342,7 +343,7 @@ async def _(bot: Bot, event: MessageEvent, args: Namespace = ShellCommandArgs())
 
 
 @Bot.on_calling_api
-async def handle_api_call(bot: Bot, api: str):
+async def handle_api_call(bot: Bot, api: str, data: Dict[str, Any]):
     global cmd_flag
     if api == "send_msg":
         cmd_flag = True

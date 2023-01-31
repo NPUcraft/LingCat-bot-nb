@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from enum import IntEnum
 from typing import (
     Set,
     Dict,
@@ -6,7 +6,8 @@ from typing import (
     List,
     Optional
 )
-from enum import IntEnum
+
+from pydantic import BaseModel
 
 News_Type = IntEnum('News_Type',
                     (
@@ -110,4 +111,11 @@ class GroupDict(BaseModel):
 
     def unsubscribe(self, subscribers: Union[Set[int], List[int], int], groups: Union[Set[int], List[int], int],
                     news_types: Union[Set[News_Type], List[News_Type], News_Type, str]):
+        if type(groups) is int:
+            groups = [groups]
+        groups = set(groups)
+        for group in groups:
+            self.groups[group].unsubscribe(subscribers, news_types)
 
+    def who_should_receive(self, group_id: int, news_type: News_Type) -> List[int]:
+        return self.groups[group_id].who_should_receive(news_type)

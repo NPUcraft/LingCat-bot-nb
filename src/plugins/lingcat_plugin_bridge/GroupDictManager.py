@@ -1,4 +1,4 @@
-from typing import Union, Optional, Dict
+from typing import Union, Optional, Dict, Set
 
 import yaml
 
@@ -11,7 +11,7 @@ class GroupDictManager:
     __group_dict: GroupDict
     __path: Path
 
-    def __init__(self, path: Path = Path() / "data" / "bridge" / "groupDict.json"):
+    def __init__(self, path: Path = Path() / "data" / "bridge" / "groupDict.yml"):
         self.__path = path
         self.__load()
 
@@ -28,8 +28,5 @@ class GroupDictManager:
                   self.__path.open('w', encoding='utf-8'),
                   allow_unicode=True)
 
-    def add_group(self, group_id: int, group_name: str = 'Unknown', subscribe_set: Optional[Dict[News_Type]] = None):
-        if subscribe_set is None:
-            subscribe_set = {}
-        if group_id not in self.__group_dict.groups.keys():
-            self.__group_dict[group_id] = GroupRelation(name=group_name, subscribe_set=subscribe_set)
+    def add_group(self, group_id: int, group_name: str = 'Unknown',
+                  subscriber_set: Optional[Dict[int ,Set[News_Type]]] = None):

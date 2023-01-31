@@ -1,10 +1,10 @@
-from typing import Union, Optional, Dict, Set
+from pathlib import Path
+from typing import Union, Optional, Dict, Set, List
 
 import yaml
-
-from .Models import GroupDict, GroupRelation, News_Type
 from pydantic import ValidationError
-from pathlib import Path
+
+from .Models import GroupDict, News_Type
 
 
 class GroupDictManager:
@@ -28,5 +28,24 @@ class GroupDictManager:
                   self.__path.open('w', encoding='utf-8'),
                   allow_unicode=True)
 
-    def add_group(self, group_id: int, group_name: str = 'Unknown',
-                  subscriber_set: Optional[Dict[int ,Set[News_Type]]] = None):
+    def register_group(self, group_id: int, group_name: str = 'Unknown',
+                       subscriber_set: Optional[Dict[int, Set[News_Type]]] = None):
+        self.__group_dict.register_group(group_id, group_name, subscriber_set)
+        self.__dump()
+
+    def delete_group(self, group_id: int):
+        self.__group_dict.delete_group(group_id)
+        self.__dump()
+
+    def subscribe(self, subscribers: Union[Set[int], List[int], int], groups: Union[Set[int], List[int], int],
+                  news_types: Union[Set[News_Type], List[News_Type], News_Type, str]):
+        self.__group_dict.subscribe(subscribers, groups, news_types)
+        self.__dump()
+
+    def unsubscribe(self, subscribers: Union[Set[int], List[int], int], groups: Union[Set[int], List[int], int],
+                    news_types: Union[Set[News_Type], List[News_Type], News_Type, str]):
+        self.__group_dict.unsubscribe(subscribers, groups, news_types)
+        self.__dump()
+
+    def who_should_receive(self, group_id: int, news_type: News_Type) -> List[int]:
+        return self.__group_dict.who_should_receive(group_id, news_type)

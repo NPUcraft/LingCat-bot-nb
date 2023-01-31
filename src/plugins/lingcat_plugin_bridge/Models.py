@@ -119,3 +119,41 @@ class GroupDict(BaseModel):
 
     def who_should_receive(self, group_id: int, news_type: News_Type) -> List[int]:
         return self.groups[group_id].who_should_receive(news_type)
+
+
+class StaffDict(BaseModel):
+    staff_groups: Dict[int, Set[int]]
+
+    def add_staff(self, staff_ids: Union[Set[int], List[int], int], group_ids: Union[Set[int], List[int], int]):
+        if type(staff_ids) is int:
+            staff_ids = [staff_ids]
+        if type(group_ids) is int:
+            group_ids = [group_ids]
+        staff_ids = set(staff_ids)
+        group_ids = set(group_ids)
+        for staff_id in staff_ids:
+            self.staff_groups[staff_id].union(group_ids)
+
+    def del_staff(self, staff_ids: Union[Set[int], List[int], int], group_ids: Union[Set[int], List[int], int]):
+        if type(staff_ids) is int:
+            staff_ids = [staff_ids]
+        if type(group_ids) is int:
+            group_ids = [group_ids]
+        staff_ids = set(staff_ids)
+        group_ids = set(group_ids)
+        for staff_id in staff_ids:
+            if staff_id in self.staff_groups.keys():
+                self.staff_groups[staff_id] -= group_ids
+                if len(self.staff_groups) == 0:
+                    del self.staff_groups[staff_id]
+
+    def del_staff_all(self, staff_ids: Union[Set[int], List[int], int]):
+        if type(staff_ids) is int:
+            staff_ids = [staff_ids]
+        staff_ids = set(staff_ids)
+        for staff_id in staff_ids:
+            if staff_id in self.staff_groups.keys():
+                del self.staff_groups[staff_id]
+
+    def groups_of_staff(self, staff_id: int) -> Set[int]:
+        return self.staff_groups[staff_id]
